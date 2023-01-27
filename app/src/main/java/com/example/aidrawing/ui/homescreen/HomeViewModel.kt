@@ -21,11 +21,16 @@ class HomeViewModel @Inject constructor(
     private val discordModel: DiscordModel
 ) : ViewModel() {
 
-    private val _isHeaderVisible = mutableStateOf<Boolean>(true)
-    val isHeaderVisible: State<Boolean> = _isHeaderVisible
+    private val _homeState = mutableStateOf(HomeState())
+    val homeState = _homeState
 
     init {
 
     }
 
+    fun onTextChanged(text: String) {
+        _homeState.value = _homeState.value.copy(
+            searchText = text
+        )
+    }
 }
