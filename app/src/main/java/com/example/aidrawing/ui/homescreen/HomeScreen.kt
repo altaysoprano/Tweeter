@@ -1,26 +1,14 @@
 package com.example.aidrawing.ui
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.*
-import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -34,8 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aidrawing.R
 import com.example.aidrawing.ui.homescreen.HomeViewModel
-import com.example.aidrawing.ui.homescreen.SearchButton
-import dagger.hilt.android.AndroidEntryPoint
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -52,7 +38,9 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Top
     ) {
         Image(
-            modifier = Modifier.size(192.dp).align(CenterHorizontally),
+            modifier = Modifier
+                .size(192.dp)
+                .align(CenterHorizontally),
             painter = painterResource(id = R.drawable.twitter_bird),
             contentDescription = "Twitter Bird"
         )
@@ -71,10 +59,17 @@ fun HomeScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .weight(1f)
-                    .align(Alignment.CenterVertically),
+                    .align(Alignment.CenterVertically)
+                    .onFocusChanged {
+                        if (it.hasFocus) {
+                            homeViewModel.onFocusChanged(true)
+                        } else {
+                            homeViewModel.onFocusChanged(false)
+                        }
+                    },
                 value = homeState.searchText,
                 placeholder = {
-                    Text(text = "Enter a username")
+                    Text(text = "Enter a Twitter username")
                 },
                 onValueChange = {
                     homeViewModel.onTextChanged(it)
@@ -97,14 +92,31 @@ fun HomeScreen(
                     }
                 },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color(0xFF1DA1F2)
+                    focusedBorderColor = Color(0XFF1DA1F2),
+                    backgroundColor = if(homeState.isTextFieldFocused) {
+                        Color.White
+                    } else {
+                        Color(0xFFeff3f4)
+                    },
+                    unfocusedBorderColor = Color.Transparent,
+                    trailingIconColor = if(homeState.isTextFieldFocused) {
+                        Color(0XFF1DA1F2)
+                    } else {
+                        Color.LightGray
+                    },
+                    leadingIconColor = if(homeState.isTextFieldFocused) {
+                        Color(0XFF1DA1F2)
+                    } else {
+                        Color.LightGray
+                    }
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(
                     onSearch = {
 
                     }
-                )
+                ),
+                shape = RoundedCornerShape(8.dp)
             )
         }
     }

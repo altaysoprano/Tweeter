@@ -33,4 +33,10 @@ class HomeViewModel @Inject constructor(
             searchText = text
         )
     }
+
+    fun onFocusChanged(isFocused: Boolean) {
+        _homeState.value = _homeState.value.copy(
+            isTextFieldFocused = isFocused
+        )
+    }
 }
