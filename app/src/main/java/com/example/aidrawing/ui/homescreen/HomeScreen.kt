@@ -83,10 +83,12 @@ fun HomeScreen(
                     )
                 },
                 trailingIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        homeViewModel.getTweets("1411330689723736066", 100)
+                    }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_search),
-                            contentDescription = "Click to share",
+                            contentDescription = "Click to Search",
                             tint = Color.Black
                         )
                     }
